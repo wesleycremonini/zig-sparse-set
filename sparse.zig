@@ -34,19 +34,10 @@ const SparseSet = struct {
 };
 
 pub fn main() !void {
-    var gpa = std.heap.GeneralPurposeAllocator(.{}){};
-    const allocator = &gpa.allocator();
-    defer if (gpa.deinit() != .ok) {
-        std.debug.print("MEMORY LEAK\n", .{});
-    };
+    var denseArray: [MAX_SIZE]usize = undefined;
+    var sparseArray: [MAX_SIZE]usize = undefined;
 
-    const ss = try allocator.create(SparseSet);
-    defer allocator.destroy(ss);
-    ss.numberOfItems = 0;
-    ss.dense = try allocator.alloc(usize, MAX_SIZE);
-    defer allocator.free(ss.dense);
-    ss.sparse = try allocator.alloc(usize, MAX_SIZE);
-    defer allocator.free(ss.sparse);
+    var ss = SparseSet{ .dense = denseArray[0..], .sparse = sparseArray[0..] };
 
     ss.add(15);
     ss.add(22);
